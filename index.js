@@ -250,7 +250,12 @@ class Journify {
 
     const items = this.queue.splice(0, this.flushAt)
     const callbacks = items.map(item => item.callback)
+
     const messages = items.map(item => item.message)
+    if (!messages.length) {
+      setImmediate(callback)
+      return Promise.resolve()
+    }
 
     const data = {
       batch: messages,
